@@ -1,5 +1,6 @@
 {
   "name": "sync-sliders",
+  "version": "0.0.1",
   "description": "Sync vertical sliders",
   "scripts": {
     "test": "standard index.js",
