@@ -1,0 +1,24 @@
+{
+  "name": "sync-sliders",
+  "description": "Sync vertical sliders",
+  "scripts": {
+    "test": "standard index.js",
+    "js": "browserify index.js -o dist/sync-sliders.js -s SyncSliders",
+    "min": "uglifyjs dist/sync-sliders.js -c -o dist/sync-sliders.min.js",
+    "watch": "npm-watch",
+    "build": "npm test && npm run js && npm run min"
+  },
+  "watch": {
+    "js": "index.js"
+  },
+  "devDependencies": {
+    "browserify": "^13.1.0",
+    "npm-watch": "^0.1.6",
+    "standard": "^8.1.0",
+    "uglify-js": "^2.7.3"
+  },
+  "dependencies": {
+    "lodash.assign": "^4.2.0",
+    "lodash.iselement": "^4.1.1"
+  }
+}

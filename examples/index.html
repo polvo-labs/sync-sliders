@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Sync Sliders Examples</title>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <link rel="stylesheet" href="../dist/sync-sliders.css">
+  <style>
+    /* custom styles for this specific example */
+    .boletas ul {
+      list-style: outside none;
+      text-align: center;
+      padding: 0;
+      margin: 0;
+      margin-top: 20px;
+    }
+
+    .boletas li {
+      display: inline-block;
+      vertical-align: middle;
+    }
+
+    .controls {
+      margin-top: 20px;
+      text-align: center;
+    }
+
+    .boletas button {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      padding: 0;
+      border: none;
+      margin: 5px;
+    }
+
+    .boletas .active button {
+      background-color: blue;
+      color: #fff;
+    }
+
+    .slide-item {
+      padding-top: 100%;
+      background-repeat: no-repeat;
+      background-position: center;
+      -webkit-background-size: cover;
+      -moz-background-size: cover;
+      background-size: cover;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12">
+        <h1 class="page-header">Sync Sliders Example</h1>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-12">
+        <div class="sync-sliders-container | js-sync-sliders">
+          <div class="sync-sliders-column">
+            <div class="sync-slider">
+              <div class="sync-slider-track">
+                <div class="sync-slide-item">
+                   <img src="http://placehold.it/1000x1000?text=1" class="img-responsive">
+                </div>
+                <div class="sync-slide-item">
+                   <img src="http://placehold.it/1000x1000?text=1.1" class="img-responsive">
+                </div>
+                <div class="sync-slide-item">
+                   <img src="http://placehold.it/1000x1000?text=1.2" class="img-responsive">
+                </div>
+                <div class="sync-slide-item">
+                   <img src="http://placehold.it/1000x1000?text=1.3" class="img-responsive">
+                </div>
+                <div class="sync-slide-item">
+                   <img src="http://placehold.it/1000x1000?text=1.4" class="img-responsive">
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="sync-sliders-column">
+            <div class="sync-slider">
+              <div class="sync-slider-track">
+                <div class="sync-slide-item">
+                  <img src="http://placehold.it/1000x1000?text=2" class="img-responsive">
+                </div>
+                <div class="sync-slide-item">
+                  <img src="http://placehold.it/1000x1000?text=2.1" class="img-responsive">
+                </div>
+                <div class="sync-slide-item">
+                  <img src="http://placehold.it/1000x1000?text=2.2" class="img-responsive">
+                </div>
+                <div class="sync-slide-item">
+                  <img src="http://placehold.it/1000x1000?text=2.3" class="img-responsive">
+                </div>
+                <div class="sync-slide-item">
+                  <img src="http://placehold.it/1000x1000?text=2.4" class="img-responsive">
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="controls">
+          <button class="js-prev">prev</button>
+          <button class="js-next">next</button>
+          <div class="boletas"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="../dist/sync-sliders.js"></script>
+  <script>
+    var sliders = new SyncSliders('.js-sync-sliders', {
+      dotsSelector: '.boletas',
+      prevButton: '.js-prev',
+      nextButton: '.js-next',
+      autoplay: true
+    })
+  </script>
+</body>
+</html>
