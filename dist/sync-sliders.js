@@ -66,7 +66,7 @@ fn.getElement = function (el) {
 fn.slideTo = function (index, noTransition) {
   if (noTransition) {
     this.firstTrack.classList.remove('transition-active')
-    this.firstTrack.classList.remove('transition-action')
+    this.secondTrack.classList.remove('transition-active')
   }
 
   var currentIndex = this.activeIndex
@@ -78,8 +78,10 @@ fn.slideTo = function (index, noTransition) {
   this.emit('afterChange', index, currentIndex)
 
   if (noTransition) {
-    this.firstTrack.classList.add('tansition-active')
-    this.firstTrack.classList.add('transition-active')
+    setTimeout(function () {
+      this.firstTrack.classList.add('transition-active')
+      this.secondTrack.classList.add('transition-active')
+    }.bind(this), 10)
   }
 }
 
