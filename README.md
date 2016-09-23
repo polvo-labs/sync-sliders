@@ -87,13 +87,23 @@ Go to the previous slide.
 
 ## events
 
-#### `change`
+#### `afterChange`
 
-Triggered each time the current slide is changed:
+Triggered **after** the current slide is changed:
 
 ```js
-sliders.on('change', function (index) {
-  console.log('Now the current index is:', index)
+sliders.on('afterChange', function (currentIndex, previousIndex) {
+  console.log('Now the current index is:', currentIndex)
+})
+```
+
+#### `beforeChange`
+
+Triggered **before** the current slide is changed:
+
+```js
+sliders.on('beforeChange', function (currentIndex, nextIndex) {
+  console.log('The slider has changed the current slide to:', nextIndex)
 })
 ```
 

@@ -56,11 +56,13 @@ fn.getElement = function (el) {
 }
 
 fn.slideTo = function (index) {
+  var currentIndex = this.activeIndex
+  this.emit('beforeChange', currentIndex, index)
   this.moveTrack(this.firstTrack, index * 100)
   var invertedActiveIndex = (this.totalSlides - 1) - index
   this.moveTrack(this.secondTrack, invertedActiveIndex * 100)
   this.activeIndex = index
-  this.emit('change', index)
+  this.emit('afterChange', index, currentIndex)
 }
 
 fn.moveTrack = function (track, percentage) {
@@ -142,7 +144,7 @@ fn.createDots = function () {
     }.bind(this, i))
   }
 
-  this.on('change', function (currentIndex) {
+  this.on('afterChange', function (currentIndex) {
     var target = ul.children[currentIndex]
     if (activeLi) activeLi.classList.remove('active')
     activeLi = target
