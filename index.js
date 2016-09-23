@@ -12,7 +12,8 @@ SyncSliders.defaults = {
   autoplaySpeed: 3000,
   prevButton: '',
   nextButton: '',
-  dotsSelector: ''
+  dotsSelector: '',
+  breakpoint: 768
 }
 
 function SyncSliders (container, options) {
@@ -20,9 +21,10 @@ function SyncSliders (container, options) {
     return new SyncSliders(container, options)
   }
 
+  this.container = this.getElement(container)
   this.options = assign({}, SyncSliders.defaults, options)
 
-  this.syncSliders = this.getElement(container).querySelectorAll('.sync-slider')
+  this.syncSliders = this.container.querySelectorAll('.sync-slider')
   this.firstSlider = this.syncSliders[0]
   this.secondSlider = this.syncSliders[1]
 
@@ -32,18 +34,23 @@ function SyncSliders (container, options) {
   this.activeIndex = 0
   this.totalSlides = this.firstTrack.children.length
 
+  this.firstTrack.classList.add('transition-active')
+  this.secondTrack.classList.add('transition-active')
+
   this.createDots()
   this.createButtons()
-  this.slideTo(0)
+  this.slideTo(0, true)
+
+  window.addEventListener('resize', this.onResize.bind(this))
 
   // Only start when the height is set
   this.once('set height', function () {
-    this.firstTrack.classList.add('transition-active')
-    this.secondTrack.classList.add('transition-active')
     this.createInterval()
   })
 
   this.setHeight()
+
+  if (window.innerWidth <= this.options.breakpoint) this.mountMobile()
 }
 
 inherits(SyncSliders, EventEmitter)
@@ -55,7 +62,12 @@ fn.getElement = function (el) {
   return document.querySelector(el)
 }
 
-fn.slideTo = function (index) {
+fn.slideTo = function (index, noTransition) {
+  if (noTransition) {
+    this.firstTrack.classList.remove('transition-active')
+    this.firstTrack.classList.remove('transition-action')
+  }
+
   var currentIndex = this.activeIndex
   this.emit('beforeChange', currentIndex, index)
   this.moveTrack(this.firstTrack, index * 100)
@@ -63,10 +75,23 @@ fn.slideTo = function (index) {
   this.moveTrack(this.secondTrack, invertedActiveIndex * 100)
   this.activeIndex = index
   this.emit('afterChange', index, currentIndex)
+
+  if (noTransition) {
+    this.firstTrack.classList.add('tansition-active')
+    this.firstTrack.classList.add('transition-active')
+  }
 }
 
 fn.moveTrack = function (track, percentage) {
-  track.style.transform = 'translateY(-' + percentage + '%)'
+  var prop = ''
+
+  if (this.mobileMounted) {
+    prop = 'translateX(-' + percentage + '%)'
+  } else {
+    prop = 'translateY(-' + percentage + '%)'
+  }
+
+  track.style.transform = prop
 }
 
 fn.next = function () {
@@ -99,6 +124,59 @@ fn.setHeight = function () {
   window.addEventListener('resize', this.updateHeight.bind(this))
 }
 
+fn.onResize = function () {
+  this.updateHeight()
+
+  var width = window.innerWidth
+
+  if (width <= this.options.breakpoint) {
+    this.mountMobile()
+  } else {
+    this.mountDesktop()
+  }
+}
+
+fn.mountDesktop = function () {
+  if (!this.mobileMounted) return
+
+  this.secondTrackSlides.forEach(function (slide) {
+    this.secondTrack.appendChild(slide)
+  }, this)
+
+  this.secondSlider.style.display = 'block'
+  this.container.classList.remove('is-mobile')
+
+  delete this.mobileMounted
+  delete this.secondTrackSlides
+
+  this.totalSlides = this.firstTrack.children.length
+  this.rebuildDots()
+  this.slideTo(0, true)
+}
+
+fn.mountMobile = function () {
+  if (this.mobileMounted) return
+
+  var secondTrackSlides = this.secondTrack.children
+  secondTrackSlides = [].slice.apply(secondTrackSlides)
+
+  secondTrackSlides.forEach(function (slide) {
+    this.firstTrack.appendChild(slide)
+  }, this)
+
+  this.secondTrack.innerHTML = ''
+  this.secondSlider.style.display = 'none'
+
+  this.container.classList.add('is-mobile')
+
+  this.mobileMounted = true
+  this.secondTrackSlides = secondTrackSlides
+
+  this.totalSlides = this.firstTrack.children.length
+  this.rebuildDots()
+  this.slideTo(0, true)
+}
+
 fn.updateHeight = function () {
   var slide = this.firstTrack.children[0]
   var height = window.getComputedStyle(slide).height
@@ -122,7 +200,7 @@ fn.pause = function () {
 fn.createDots = function () {
   if (!this.options.dotsSelector) return
 
-  var dots = this.getElement(this.options.dotsSelector)
+  var dots = this.dots = this.getElement(this.options.dotsSelector)
   var ul = document.createElement('ul')
   var activeLi = null
 
@@ -144,12 +222,30 @@ fn.createDots = function () {
     }.bind(this, i))
   }
 
-  this.on('afterChange', function (currentIndex) {
+  function afterChange (currentIndex) {
     var target = ul.children[currentIndex]
     if (activeLi) activeLi.classList.remove('active')
     activeLi = target
     activeLi.classList.add('active')
+  }
+
+  this.on('afterChange', afterChange)
+
+  this.once('destroy dots', function () {
+    this.removeListener('afterChange', afterChange)
   })
+}
+
+fn.destroyDots = function () {
+  if (!this.dots) return
+  this.dots.innerHTML = ''
+  delete this.dots
+  this.emit('destroy dots')
+}
+
+fn.rebuildDots = function () {
+  this.destroyDots()
+  this.createDots()
 }
 
 fn.createButtons = function () {

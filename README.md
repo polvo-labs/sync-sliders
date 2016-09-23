@@ -58,6 +58,7 @@ var sliders = new SyncSliders('.js-sync-sliders', options)
 | prevButton | `Element` or `String` | Button for "Previous slide" | `null` |
 | nextButton | `Element` or `String` | Button for "Next slide" | `null` |
 | dotsSelector | `Element` or `String` | Element that contains the dots | `null`
+| breakpoint | Number | Breakpoint for mobile | `768`
 
 ## public api
 
@@ -73,7 +74,7 @@ Resumes the paused autoplay.
 
 Property with the current slide's active index.
 
-#### `slideTo(index)`
+#### `slideTo(index, noTransition)`
 
 Go to the slide.
 

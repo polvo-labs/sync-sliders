@@ -57,3 +57,16 @@
   -ms-transition: all 0.6s ease;
   transition: all 0.6s ease;
 }
+
+/* mobile */
+.sync-sliders-container.is-mobile .sync-sliders-column {
+  float: none;
+  width: 100%;
+}
+.sync-sliders-container.is-mobile .sync-slide-item {
+  display: inline-block;
+}
+.sync-sliders-container.is-mobile .sync-slider-track {
+  white-space: nowrap;
+  font-size: 0;
+}
