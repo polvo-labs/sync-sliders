@@ -2,6 +2,8 @@
 
 Vanilla module for creating synced vertical sliders.
 
+[See live demo](https://polvo-labs.github.io/sync-sliders/)
+
 ## installation
 
 `npm install polvo-labs/sync-sliders --save`
